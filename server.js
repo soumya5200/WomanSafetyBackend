@@ -25,7 +25,7 @@ app.use(express.json());
 app.use("/uploads", express.static("uploads"));
 
 app.use(cors({
-  origin: "*",
+  origin: "https://woman-safety-frontend-kpea.vercel.app",
   methods: ["GET", "POST", "PUT", "PATCH", "DELETE"],
   credentials: true,
   allowedHeaders: ["Content-Type", "Authorization"],
