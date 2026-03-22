@@ -18,16 +18,25 @@ const safeSpotRoutes = require("./routes/safeSpotRoutes");
 const app = express();
 const port = process.env.PORT || 5000;
 
-// ✅ Middleware
+// JSON middleware
 app.use(express.json());
 
-// ✅ CORS FIX (FINAL)
-app.use(cors());
+// ✅ FIXED CORS FOR VERCEL FRONTEND
+// Allow frontend deployed on Vercel to access backend
+app.use(cors({
+  origin: [
+    "https://woman-safety-frontend-kpea.vercel.app",
+    "https://woman-safety-frontend.vercel.app",
+    "http://localhost:3000"
+  ],
+  methods: ["GET", "POST", "PUT", "DELETE", "PATCH"],
+  allowedHeaders: ["Content-Type", "Authorization"]
+}));
 
-// ✅ Static uploads
+// Static folder
 app.use("/uploads", express.static("uploads"));
 
-// ✅ Routes
+// Routes
 app.use("/api/v1/users", userRoutes);
 app.use("/api/v1/incidents", incRoutes);
 app.use("/api/v1/emergency", emergencyRoutes);
@@ -37,10 +46,10 @@ app.use("/api/v1/sos", sosRoutes);
 app.use("/api/v1/location", locationRoutes);
 app.use("/api/v1/safespots", safeSpotRoutes);
 
-// ✅ Error handler (LAST)
+// Error handler
 app.use(errorHandler);
 
-// ✅ Start server
+// Start server
 const start = async () => {
   try {
     await connectDB(process.env.MONGO_URL);
